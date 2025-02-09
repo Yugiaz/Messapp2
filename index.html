@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We Chat</title>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #FFDAB9; /* Peach background color */
+    background-image: url('https://i.pinimg.com/736x/af/04/f6/af04f65979fd1e5a71850aaa60219503.jpg'); /* Background image */
+    background-size: 40%; /* Adjust the image size */
+    background-repeat: no-repeat;
+    background-position: 50% center; /* Move the background image 20% more to the left */
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .chat-container {
+    width: 300px;
+    height: 450px;
+    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    margin-top: 5%; /* Moved the chat container up by 20% in total */
+    border-radius: 8px; /* Optional: add rounded corners */
+  }
+
+  h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 20px; /* Smaller font size for header */
+  }
+
+  #messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    padding: 8px;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    font-size: 14px; /* Smaller font size for messages */
+  }
+
+  #messageInput, #nameInput {
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    font-size: 14px; /* Smaller font size for input fields */
+    border: none; /* Removed the grey border */
+    background-color: #f5f5f5; /* Light background color for input */
+    margin-top: 10%; /* Lower the input fields by 10% */
+  }
+
+  #sendBtn {
+    padding: 6px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px; /* Smaller font size for button */
+    box-sizing: border-box;
+  }
+
+  #sendBtn:hover {
+    background-color: #45a049;
+  }
+
+  .message {
+    background-color: #e1f5fe;
+    padding: 6px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    font-size: 14px; /* Smaller font size for message text */
+  }
+
+  .message-user {
+    text-align: right;
+    background-color: #d1e7dd;
+  }
+
+  .message-name {
+    font-weight: bold;
+    color: #333;
+  }
+</style>
+
+</head>
+
+<body>
+
+  <div class="chat-container">
+    <h3>Let's talk this out</h3>
+
+    <!-- User Name Input -->
+    <input type="text" id="nameInput" placeholder="Enter your name..." />
+
+    <div id="messages"></div>
+    
+    <input type="text" id="messageInput" placeholder="Type a message..." />
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <script type="module">
+    // Import Firebase SDK
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+    import { getDatabase, ref, push, set, onValue } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js';
+  
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBnlPnhNJhmmDfp7h24CevXJZu9phryuyg",
+      authDomain: "mesapp-382c0.firebaseapp.com",
+      databaseURL: "https://mesapp-382c0-default-rtdb.asia-southeast1.firebasedatabase.app/",
+      projectId: "mesapp-382c0",
+      storageBucket: "mesapp-382c0.appspot.com",
+      messagingSenderId: "599901188015",
+      appId: "1:599901188015:web:3ee1945255c1f640dc095a",
+      measurementId: "G-N6EW1BBNT1"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    let userName = '';
+
+    // Load messages from Firebase and display
+    const loadMessages = () => {
+      const messagesRef = ref(db, 'messages');
+      onValue(messagesRef, (snapshot) => {
+        const data = snapshot.val();
+        const messageContainer = document.getElementById('messages');
+        messageContainer.innerHTML = ''; // Clear container before reloading messages
+  
+        if (data) {
+          Object.keys(data).forEach((key) => {
+            const message = data[key];
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            
+            // Add user name above the message
+            const userNameDiv = document.createElement('div');
+            userNameDiv.classList.add('message-name');
+            userNameDiv.textContent = message.user;
+            
+            // Display message text
+            const messageTextDiv = document.createElement('div');
+            messageTextDiv.textContent = message.text;
+
+            messageDiv.appendChild(userNameDiv);
+            messageDiv.appendChild(messageTextDiv);
+
+            // Add custom style for user messages
+            if (message.user === 'me') {
+              messageDiv.classList.add('message-user');
+            }
+
+            messageContainer.appendChild(messageDiv);
+          });
+        } else {
+          console.log('No messages available.');
+        }
+
+        // Scroll to the bottom to display the latest message
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+      }, (error) => {
+        console.error('Error loading messages:', error);
+      });
+    };
+
+    // Send a message to Firebase
+    const sendMessage = (message) => {
+      const messagesRef = ref(db, 'messages');
+      const newMessageRef = push(messagesRef);
+      set(newMessageRef, { text: message, user: userName || 'Anonymous' }) // Store user name or default to 'Anonymous'
+        .then(() => {
+          console.log('Message sent successfully.');
+        })
+        .catch((error) => {
+          console.error('Error sending message:', error);
+        });
+    };
+
+    // Event listener for the send button
+    document.getElementById('sendBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      const messageInput = document.getElementById('messageInput');
+      const message = messageInput.value.trim();
+      
+      if (message) {
+        sendMessage(message); // Send the message to Firebase
+        messageInput.value = ''; // Clear the input field
+      } else {
+        console.log('Message is empty');
+      }
+    });
+
+    // Update userName when the user inputs their name
+    document.getElementById('nameInput').addEventListener('input', (e) => {
+      userName = e.target.value.trim();
+    });
+
+    // Load messages on page load
+    loadMessages();
+  </script>
+
+</body>
+</html>
