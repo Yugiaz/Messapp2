@@ -5,95 +5,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>We Chat</title>
   <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #FFDAB9; /* Peach background color */
-    background-image: url('screen.jpg'); /* Background image */
-    background-size: 40%; /* Adjust the image size */
-    background-repeat: no-repeat;
-    background-position: 50% center; /* Move the background image 20% more to the left */
-    background-attachment: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #FFDAB9; /* Peach background color */
+      background-image: url('screen.jpg'); /* Background image */
+      background-size: 40%; /* Background image size remains unchanged */
+      background-repeat: no-repeat;
+      background-position: 50% center; /* Background position remains unchanged */
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-  .chat-container {
-    width: 300px;
-    height: 450px;
-    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    backdrop-filter: blur(10px);
-    margin-top: 5%; /* Moved the chat container up by 20% in total */
-    border-radius: 8px; /* Optional: add rounded corners */
-  }
+    .chat-container {
+      width: 382px; /* Increased width by 5% from 364px */
+      height: 445px; /* Decreased by 5% from 470px */
+      background-color: rgba(255, 255, 255, 0.9); /* Slight transparency */
+      display: flex;
+      flex-direction: column;
+      padding: 16.5px; /* Increased by 10% from 15px */
+      backdrop-filter: blur(10px);
+      margin-top: 5%; /* Moved vertically up by 2% from 7% */
+      margin-left: -2%; /* Moved 2% to the left */
+      border-radius: 8px; /* Optional: add rounded corners */
+    }
 
-  h3 {
-    text-align: center;
-    margin-bottom: 15px;
-    font-size: 20px; /* Smaller font size for header */
-  }
+    h3 {
+      text-align: center;
+      margin-bottom: 16.5px; /* Increased by 10% from 15px */
+      font-size: 22px; /* Increased by 10% from 20px */
+    }
 
-  #messages {
-    flex-grow: 1;
-    overflow-y: auto;
-    margin-bottom: 10px;
-    padding: 8px;
-    background-color: #fafafa;
-    box-sizing: border-box;
-    font-size: 14px; /* Smaller font size for messages */
-  }
+    #messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      padding: 8px;
+      background-color: #fafafa;
+      box-sizing: border-box;
+      font-size: 14px;
+      word-break: break-word; /* Breaks long words to fit inside the box */
+      height: calc(100% - 120px); /* Increased the height to make the message box longer */
+    }
 
-  #messageInput, #nameInput {
-    width: 100%;
-    padding: 6px;
-    margin-bottom: 10px;
-    box-sizing: border-box;
-    font-size: 14px; /* Smaller font size for input fields */
-    border: none; /* Removed the grey border */
-    background-color: #f5f5f5; /* Light background color for input */
-    margin-top: 10%; /* Lower the input fields by 10% */
-  }
+    #messageInput, #nameInput {
+      width: 100%; /* Ensures full width */
+      padding: 6px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      font-size: 14px; /* Smaller font size */
+      border: none;
+      background-color: #f5f5f5;
+      margin-top: 10%;
+      word-break: break-word; /* Break words to prevent overflow */
+      overflow: hidden; /* Prevents overflow */
+    }
 
-  #sendBtn {
-    padding: 6px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px; /* Smaller font size for button */
-    box-sizing: border-box;
-  }
+    #sendBtn {
+      padding: 6.6px; /* Increased by 10% from 6px */
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 15.4px; /* Increased by 10% from 14px */
+      box-sizing: border-box;
+    }
 
-  #sendBtn:hover {
-    background-color: #45a049;
-  }
+    #sendBtn:hover {
+      background-color: #45a049;
+    }
 
-  .message {
-    background-color: #e1f5fe;
-    padding: 6px;
-    border-radius: 5px;
-    margin-bottom: 8px;
-    font-size: 14px; /* Smaller font size for message text */
-  }
+    .message {
+      background-color: #e1f5fe;
+      padding: 6.6px; /* Increased by 10% from 6px */
+      border-radius: 5px;
+      margin-bottom: 8.8px; /* Increased by 10% from 8px */
+      font-size: 15.4px; /* Increased by 10% from 14px */
+    }
 
-  .message-user {
-    text-align: right;
-    background-color: #d1e7dd;
-  }
+    .message-user {
+      text-align: right;
+      background-color: #d1e7dd;
+    }
 
-  .message-name {
-    font-weight: bold;
-    color: #333;
-  }
-</style>
-
+    .message-name {
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
 
 <body>
@@ -105,7 +109,7 @@
     <input type="text" id="nameInput" placeholder="Enter your name..." />
 
     <div id="messages"></div>
-    
+
     <input type="text" id="messageInput" placeholder="Type a message..." />
     <button id="sendBtn">Send</button>
   </div>
@@ -114,7 +118,7 @@
     // Import Firebase SDK
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
     import { getDatabase, ref, push, set, onValue } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js';
-  
+
     // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBnlPnhNJhmmDfp7h24CevXJZu9phryuyg",
@@ -140,18 +144,18 @@
         const data = snapshot.val();
         const messageContainer = document.getElementById('messages');
         messageContainer.innerHTML = ''; // Clear container before reloading messages
-  
+
         if (data) {
           Object.keys(data).forEach((key) => {
             const message = data[key];
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message');
-            
+
             // Add user name above the message
             const userNameDiv = document.createElement('div');
             userNameDiv.classList.add('message-name');
             userNameDiv.textContent = message.user;
-            
+
             // Display message text
             const messageTextDiv = document.createElement('div');
             messageTextDiv.textContent = message.text;
@@ -190,17 +194,31 @@
         });
     };
 
-    // Event listener for the send button
-    document.getElementById('sendBtn').addEventListener('click', (e) => {
-      e.preventDefault();
+    // Function to send the message from the input field
+    function sendMessageFromInput() {
       const messageInput = document.getElementById('messageInput');
       const message = messageInput.value.trim();
-      
+
       if (message) {
         sendMessage(message); // Send the message to Firebase
         messageInput.value = ''; // Clear the input field
       } else {
         console.log('Message is empty');
+      }
+    }
+
+    // Event listener for the send button
+    document.getElementById('sendBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      sendMessageFromInput(); // Send the message from the input
+    });
+
+    // Event listener for the "Enter" key press in the message input
+    document.getElementById('messageInput').addEventListener('keydown', (e) => {
+      // Check if the pressed key is "Enter"
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent the default Enter behavior (e.g., a new line in the input)
+        sendMessageFromInput(); // Send the message from the input
       }
     });
 
